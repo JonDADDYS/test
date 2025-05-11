@@ -131,10 +131,10 @@ export const Navbar = () => {
             <motion.a
               key={`nav-${index}`}
               href={link.path}
-              className={`text-xl transition-all duration-500 px-4 ${
+              className={`text-xl transition-all duration-300 px-4 ${
                 hasWhiteBackground 
-                  ? 'text-gray-700 hover:text-gray-900' 
-                  : 'text-white hover:text-gray-200'
+                  ? 'text-gray-700 hover:text-green-400' 
+                  : 'text-white hover:text-green-400'
               }`}
               style={{ minWidth: '120px', textAlign: 'center' }}
               variants={itemVariants}
@@ -152,8 +152,8 @@ export const Navbar = () => {
           onClick={toggleNav}
           className={`md:hidden focus:outline-none fixed right-6 top-6 z-50 p-2 rounded-full transition-all duration-500 ${
             hasWhiteBackground 
-              ? 'bg-white/90 text-gray-800 shadow-sm' 
-              : 'bg-black/30 text-white'
+              ? 'bg-white/90 text-gray-800 hover:text-green-400 shadow-sm' 
+              : 'bg-black/30 text-white hover:text-green-400'
           }`}
           aria-expanded={nav}
           aria-controls="mobile-menu"
@@ -214,7 +214,7 @@ export const Navbar = () => {
                 <motion.a
                   href={link.path}
                   onClick={closeNav}
-                  className="text-3xl text-white hover:text-green-400 block py-6"
+                  className="text-3xl text-white hover:text-green-400 transition-colors duration-300 block py-6"
                   whileHover={{ scale: 1.05 }}
                 >
                   {link.title}

@@ -34,13 +34,13 @@ export const Hero = () => {
       {/* Contenuto */}
       <div className="container mx-auto px-4 z-10 text-center">
         <motion.h1 
-          className="text-4xl md:text-6xl lg:text-8.75xl font-bold text-white mb-6"
+          className="text-5xl md:text-6xl lg:text-8.75xl font-bold text-white mb-6"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
        {/*  <p className="font-mono text-xl text-green-600">Dal 1905</p> */}
-          <span className="block">Antica Osteria</span>
+          <span className="block">Antica Hosteria</span>
           <span className="block text-green-600">Odiago</span>
         </motion.h1>
         
