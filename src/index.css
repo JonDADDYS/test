@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-
+@import url('https://fonts.cdnfonts.com/css/egoshic');
 
 @tailwind base;
 @tailwind components;
@@ -17,15 +16,15 @@ html {
 }
 
 body {
-  font-family: 'Lora', serif; /* Aggiunto serif come fallback */
+  font-family: 'Egoshic', 'Lora', serif;
   background-color: #000;
   color: #fff;
 }
 
-/* Se vuoi usare EGOCHIC come font principale */
-/* body {
-  font-family: 'EGOCHIC', sans-serif;
-} */
+/* Se vuoi usare Egoshic solo per alcuni elementi */
+.egoshic-font {
+  font-family: 'Egoshic', sans-serif;
+}
 
 @layer utilities {
   @keyframes blink {

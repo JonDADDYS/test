@@ -22,7 +22,7 @@ export const About = () => {
   };
 
   return (
-    <section id="about" className="bg-white py-20 px-4">
+    <section  data-white-section="true"  id="about" className="bg-white py-20 px-4">
       <div className="container mx-auto">
         <motion.h2 
           className="text-4xl font-serif text-center mb-16 text-gray-800"

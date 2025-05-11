@@ -19,6 +19,7 @@ export default function App() {
        <Navbar/>
         <Hero />
         <About />
+        <About />
      
 
         

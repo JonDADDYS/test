@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
@@ -27,41 +27,102 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut" // Sostituito con easing standard
+      ease: "easeOut"
     }
   }
 };
 
 export const Navbar = () => {
   const [nav, setNav] = useState(false);
+  const [hasWhiteBackground, setHasWhiteBackground] = useState(false);
 
   const toggleNav = () => setNav((prev) => !prev);
   const closeNav = () => setNav(false);
 
+  const scrollToHero = () => {
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+      heroSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    closeNav();
+  };
+
+  useEffect(() => {
+    const checkBackground = () => {
+      const navbar = document.querySelector('nav');
+      if (!navbar) return;
+      
+      const navbarRect = navbar.getBoundingClientRect();
+      const pointToCheck = navbarRect.bottom + 5;
+      
+      const elementBelow = document.elementFromPoint(
+        window.innerWidth / 2,
+        pointToCheck
+      );
+      
+      if (!elementBelow) return;
+      
+      const bgColor = getComputedStyle(elementBelow).backgroundColor;
+      const isWhite = bgColor === 'rgb(255, 255, 255)' || 
+                     elementBelow.closest('[data-white-section="true"]');
+      
+      setHasWhiteBackground(!!isWhite);
+    };
+
+    checkBackground();
+    window.addEventListener('scroll', checkBackground);
+    return () => window.removeEventListener('scroll', checkBackground);
+  }, []);
+
   return (
-    <div className="z-50 fixed w-full bg-transparent">
-      {/* Navbar principale */}
+    <nav className="z-50 fixed w-full">
       <motion.div 
-        className="container mx-auto px-4 py-6"
+        className={`absolute inset-0 transition-all duration-500 ${
+          hasWhiteBackground 
+            ? 'bg-white/80 backdrop-blur-sm shadow-sm' 
+            : ''
+        }`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      />
+      
+      <motion.div 
+        className="container mx-auto px-4 py-6 relative"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        {/* Logo */}
+        {/* Logo con hover ottimizzato */}
         <motion.div 
-          className="flex justify-center mb-10"
+          className="flex justify-center mb-10 cursor-pointer"
           variants={itemVariants}
+          onClick={scrollToHero}
         >
           <motion.img 
             src="/img/logo2.png" 
             alt="Osteria Odiago Logo"
-            className="h-20 object-contain"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
+            className={`h-20 object-contain ${
+              hasWhiteBackground 
+                ? 'filter brightness-0 opacity-90 hover:opacity-100' 
+                : 'opacity-95 hover:opacity-100'
+            }`}
+            whileHover={{
+              scale: 1.05,
+              transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 15,
+                mass: 0.7,
+                velocity: 0.5
+              }
+            }}
+            transition={{
+              duration: 0.15,
+              ease: [0.43, 0.13, 0.23, 0.96]
+            }}
           />
         </motion.div>
 
-        {/* Desktop Links */}
         <motion.div 
           className="hidden md:flex justify-between w-full max-w-6xl mx-auto"
           variants={containerVariants}
@@ -70,24 +131,37 @@ export const Navbar = () => {
             <motion.a
               key={`nav-${index}`}
               href={link.path}
-              className="text-white text-xl hover:text-green-400 transition-colors duration-300 px-4"
+              className={`text-xl transition-all duration-500 px-4 ${
+                hasWhiteBackground 
+                  ? 'text-gray-700 hover:text-gray-900' 
+                  : 'text-white hover:text-gray-200'
+              }`}
               style={{ minWidth: '120px', textAlign: 'center' }}
               variants={itemVariants}
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ 
+                scale: 1.05,
+                transition: { duration: 0.3 }
+              }}
             >
               {link.title}
             </motion.a>
           ))}
         </motion.div>
 
-        {/* Mobile Button */}
         <motion.button
           onClick={toggleNav}
-          className="md:hidden text-white focus:outline-none fixed right-6 top-6 z-50 p-2 bg-black/30 rounded-full"
+          className={`md:hidden focus:outline-none fixed right-6 top-6 z-50 p-2 rounded-full transition-all duration-500 ${
+            hasWhiteBackground 
+              ? 'bg-white/90 text-gray-800 shadow-sm' 
+              : 'bg-black/30 text-white'
+          }`}
           aria-expanded={nav}
           aria-controls="mobile-menu"
           variants={itemVariants}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ 
+            scale: 1.1,
+            backgroundColor: hasWhiteBackground ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,0.5)'
+          }}
         >
           {nav ? (
             <AiOutlineClose size={24} aria-hidden="true" />
@@ -97,7 +171,6 @@ export const Navbar = () => {
         </motion.button>
       </motion.div>
 
-      {/* Mobile Menu */}
       {nav && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -106,13 +179,28 @@ export const Navbar = () => {
           transition={{ duration: 0.3 }}
           className="fixed inset-0 bg-black/95 z-40 flex flex-col items-center justify-center"
         >
+          {/* Logo mobile con hover ottimizzato */}
           <motion.img 
             src="/img/logo2.png" 
             alt="Osteria Odiago Logo"
-            className="h-28 mb-12 object-contain"
+            className="h-28 mb-12 object-contain cursor-pointer"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, ease: "easeOut" }}
+            whileHover={{
+              scale: 1.05,
+              transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 15,
+                mass: 0.7
+              }
+            }}
+            transition={{ 
+              delay: 0.2,
+              ease: [0.43, 0.13, 0.23, 0.96],
+              duration: 0.15
+            }}
+            onClick={scrollToHero}
           />
           
           <motion.ul 
@@ -126,7 +214,7 @@ export const Navbar = () => {
                 <motion.a
                   href={link.path}
                   onClick={closeNav}
-                  className="text-3xl text-white hover:text-amber-400 block py-6"
+                  className="text-3xl text-white hover:text-green-400 block py-6"
                   whileHover={{ scale: 1.05 }}
                 >
                   {link.title}
@@ -136,6 +224,6 @@ export const Navbar = () => {
           </motion.ul>
         </motion.div>
       )}
-    </div>
+    </nav>
   );
 };
