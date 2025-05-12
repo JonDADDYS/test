@@ -76,26 +76,27 @@ export const Menu = () => {
     })
   };
 
+  // Varianti più veloci solo per l'apparizione iniziale
   const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
-        staggerChildren: 0.2,
+        duration: 0.4, // Ridotto da 0.8 a 0.4
+        staggerChildren: 0.1, // Ridotto da 0.2 a 0.1
         when: "beforeChildren"
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 }, // Ridotto y da 20 a 10
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: 0.3, // Ridotto da 0.6 a 0.3
         ease: "easeOut"
       }
     }
@@ -112,7 +113,7 @@ export const Menu = () => {
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
         variants={containerVariants}
-        className="container mx-auto px-4"
+        className="container mx-auto px-4 pt-14"
       >
         <motion.h2 
           className="text-4xl font-serif text-center text-gray-800 mb-12"
@@ -162,7 +163,7 @@ export const Menu = () => {
                   className="flex flex-col h-full"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
+                  transition={{ delay: 0.1 }} // Ridotto da 0.2 a 0.1
                 >
                   <div className="mb-4">
                     <motion.h3 
@@ -183,9 +184,12 @@ export const Menu = () => {
                       {menus[currentMenu].items.map((item, index) => (
                         <motion.div
                           key={index}
-                          initial={{ opacity: 0, x: -20 }}
+                          initial={{ opacity: 0, x: -10 }} // Ridotto x da -20 a -10
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.4 + index * 0.1 }}
+                          transition={{ 
+                            delay: 0.2 + index * 0.05, // Ridotto delay e incremento
+                            duration: 0.2 // Ridotto da 0.3 a 0.2
+                          }}
                           className="border-b border-stone-100 pb-3"
                         >
                           <h4 className="font-serif text-lg md:text-xl text-green-600 mb-1">{item.category}</h4>
@@ -198,7 +202,7 @@ export const Menu = () => {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9 }}
+                    transition={{ delay: 0.4 }} // Ridotto da 0.9 a 0.4
                     className="bg-amber-50 p-3 md:p-4 rounded border-l-4 border-amber-300 mt-4"
                   >
                     <p className="text-stone-600 italic text-sm md:text-base whitespace-pre-line">{menus[currentMenu].note}</p>
@@ -213,7 +217,7 @@ export const Menu = () => {
             className="flex justify-center mt-6 space-x-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 0.5 }} // Ridotto da 1 a 0.5
           >
             {menus.map((_, index) => (
               <button

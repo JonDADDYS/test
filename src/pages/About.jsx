@@ -67,7 +67,7 @@ export const About = () => {
         initial="hidden"
         animate={inView1 ? "visible" : "hidden"}
         variants={containerVariants}
-        className="container mx-auto px-4"
+        className="container mx-auto px-4 pt-14"
       >
         <motion.div 
           variants={textVariants}
