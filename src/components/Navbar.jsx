@@ -14,19 +14,39 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3
+      when: "beforeChildren",
+      staggerChildren: 0.1,
     }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { 
+    opacity: 0,
+    y: -5 // Ridotto da -10 a -5 per un movimento più sottile
+  },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.4, // Ridotta la durata
+      ease: [0.25, 0.1, 0.25, 1]
+    }
+  },
+  hover: {
+    scale: 1.05,
+    transition: {
+      duration: 0.15 // Animazione hover più rapida
+    }
+  }
+};
+
+const underlineVariants = {
+  hidden: { width: 0 },
+  hover: {
+    width: "100%",
+    transition: {
+      duration: 0.2, // Underline più rapido
       ease: "easeOut"
     }
   }
@@ -35,6 +55,7 @@ const itemVariants = {
 export const Navbar = () => {
   const [nav, setNav] = useState(false);
   const [hasWhiteBackground, setHasWhiteBackground] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const toggleNav = () => setNav((prev) => !prev);
   const closeNav = () => setNav(false);
@@ -48,6 +69,7 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
+    setIsMounted(true);
     const checkBackground = () => {
       const navbar = document.querySelector('nav');
       if (!navbar) return;
@@ -75,9 +97,9 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <nav className="z-50 fixed w-full">
+    <nav className="z-50 fixed w-full top-0"> {/* Aggiunto top-0 per aderire al bordo superiore */}
       <motion.div 
-        className={`absolute inset-0 transition-all duration-500 ${
+        className={`absolute inset-0 transition-all duration-300 ${
           hasWhiteBackground 
             ? 'bg-white/80 backdrop-blur-sm shadow-sm' 
             : ''
@@ -87,38 +109,27 @@ export const Navbar = () => {
       />
       
       <motion.div 
-        className="container mx-auto px-4 py-6 relative"
+        className="container mx-auto px-4 py-3 relative" // Ridotto py-6 a py-3
         initial="hidden"
-        animate="visible"
+        animate={isMounted ? "visible" : "hidden"}
         variants={containerVariants}
       >
-        {/* Logo con hover ottimizzato */}
         <motion.div 
-          className="flex justify-center mb-10 cursor-pointer"
+          className="flex justify-center mb-6 cursor-pointer" // Ridotto mb-10 a mb-6
           variants={itemVariants}
           onClick={scrollToHero}
         >
           <motion.img 
             src="/img/logo2.png" 
             alt="Osteria Odiago Logo"
-            className={`h-20 object-contain ${
+            className={`h-16 object-contain ${ // Ridotto h-20 a h-16
               hasWhiteBackground 
                 ? 'filter brightness-0 opacity-90 hover:opacity-100' 
                 : 'opacity-95 hover:opacity-100'
             }`}
             whileHover={{
               scale: 1.05,
-              transition: {
-                type: "spring",
-                stiffness: 400,
-                damping: 15,
-                mass: 0.7,
-                velocity: 0.5
-              }
-            }}
-            transition={{
-              duration: 0.15,
-              ease: [0.43, 0.13, 0.23, 0.96]
+              transition: { type: "spring", stiffness: 400 }
             }}
           />
         </motion.div>
@@ -128,45 +139,49 @@ export const Navbar = () => {
           variants={containerVariants}
         >
           {navLinks.map((link, index) => (
-            <motion.a
+            <motion.div 
               key={`nav-${index}`}
-              href={link.path}
-              className={`text-xl transition-all duration-300 px-4 ${
-                hasWhiteBackground 
-                  ? 'text-gray-700 hover:text-green-400' 
-                  : 'text-white hover:text-green-400'
-              }`}
-              style={{ minWidth: '120px', textAlign: 'center' }}
+              className="relative"
               variants={itemVariants}
-              whileHover={{ 
-                scale: 1.05,
-                transition: { duration: 0.3 }
-              }}
+              whileHover="hover"
             >
-              {link.title}
-            </motion.a>
+              <a
+                href={link.path}
+                className={`text-lg px-3 relative ${ // Ridotto text-xl a text-lg e px-4 a px-3
+                  hasWhiteBackground 
+                    ? 'text-gray-700 hover:text-green-600' 
+                    : 'text-white hover:text-green-400'
+                } transition-colors duration-200 block`} // Ridotta durata hover
+                style={{ minWidth: '100px', textAlign: 'center' }} // Ridotto minWidth
+              >
+                {link.title}
+                <motion.span
+                  className={`absolute bottom-0 left-0 h-[2px] ${ // Sottolineatura più sottile (h-0.5 a h-[2px])
+                    hasWhiteBackground ? 'bg-green-600' : 'bg-green-400'
+                  }`}
+                  variants={underlineVariants}
+                  initial="hidden"
+                />
+              </a>
+            </motion.div>
           ))}
         </motion.div>
 
         <motion.button
           onClick={toggleNav}
-          className={`md:hidden focus:outline-none fixed right-6 top-6 z-50 p-2 rounded-full transition-all duration-500 ${
+          className={`md:hidden focus:outline-none fixed right-4 top-4 z-50 p-2 rounded-full ${ // Avvicinato al bordo (right-6/right-4 e top-6/top-4)
             hasWhiteBackground 
-              ? 'bg-white/90 text-gray-800 hover:text-green-400 shadow-sm' 
+              ? 'bg-white/90 text-gray-800 hover:text-green-600 shadow-sm' 
               : 'bg-black/30 text-white hover:text-green-400'
           }`}
           aria-expanded={nav}
-          aria-controls="mobile-menu"
           variants={itemVariants}
-          whileHover={{ 
-            scale: 1.1,
-            backgroundColor: hasWhiteBackground ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,0.5)'
-          }}
+          whileHover={{ scale: 1.1 }}
         >
           {nav ? (
-            <AiOutlineClose size={24} aria-hidden="true" />
+            <AiOutlineClose size={20} aria-hidden="true" /> 
           ) : (
-            <AiOutlineMenu size={24} aria-hidden="true" />
+            <AiOutlineMenu size={20} aria-hidden="true" />
           )}
         </motion.button>
       </motion.div>
@@ -175,53 +190,40 @@ export const Navbar = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 bg-black/95 z-40 flex flex-col items-center justify-center"
+          className="fixed inset-0 bg-black/95 z-40 flex flex-col items-center justify-center pt-6" // Aggiunto pt-6
         >
-          {/* Logo mobile con hover ottimizzato */}
           <motion.img 
             src="/img/logo2.png" 
             alt="Osteria Odiago Logo"
-            className="h-28 mb-12 object-contain cursor-pointer"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{
-              scale: 1.05,
-              transition: {
-                type: "spring",
-                stiffness: 400,
-                damping: 15,
-                mass: 0.7
-              }
-            }}
-            transition={{ 
-              delay: 0.2,
-              ease: [0.43, 0.13, 0.23, 0.96],
-              duration: 0.15
-            }}
+            className="h-20 mb-8 object-contain cursor-pointer" // Ridotto h-28 a h-20 e mb-12 a mb-8
+            initial={{ opacity: 0, y: -10 }} // Ridotto y: -20 a y: -10
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.3 }} // Ridotta durata
             onClick={scrollToHero}
           />
           
-          <motion.ul 
-            className="space-y-10 text-center"
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-          >
+          <div className="space-y-6 text-center"> {/* Ridotto space-y-8 a space-y-6 */}
             {navLinks.map((link, index) => (
-              <motion.li key={`mobile-nav-${index}`} variants={itemVariants}>
-                <motion.a
+              <motion.div
+                key={`mobile-nav-${index}`}
+                initial={{ opacity: 0, x: -10 }} // Ridotto x: -20 a x: -10
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ 
+                  delay: 0.15 + index * 0.08, // Ridotto delay
+                  duration: 0.3 // Ridotta durata
+                }}
+              >
+                <a
                   href={link.path}
                   onClick={closeNav}
-                  className="text-3xl text-white hover:text-green-400 transition-colors duration-300 block py-6"
-                  whileHover={{ scale: 1.05 }}
+                  className="text-2xl text-white hover:text-green-400 block py-3 relative group" // Ridotto text-3xl a text-2xl e py-4 a py-3
                 >
                   {link.title}
-                </motion.a>
-              </motion.li>
+                  <span className="absolute bottom-2 left-1/2 transform -translate-x-1/2 h-[2px] bg-green-400 w-0 group-hover:w-3/4 transition-all duration-200"></span> {/* Sottolineatura più sottile e ridotta durata */}
+                </a>
+              </motion.div>
             ))}
-          </motion.ul>
+          </div>
         </motion.div>
       )}
     </nav>

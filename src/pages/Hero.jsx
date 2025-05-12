@@ -1,87 +1,163 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Instagram, Facebook } from 'lucide-react';
+import { useRef } from 'react';
 
 export const Hero = () => {
-  const socialIconVariants = {
+  const heroRef = useRef(null);
+  
+  // Hook per l'animazione dello scroll
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Animazioni di scale e parallasse
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 50]);
+
+  // Varianti per l'animazione di entrata
+  const socialContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.8,
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const socialItemVariants = {
+    hidden: { 
+      y: 20,
+      opacity: 0,
+      scale: 0.8
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 15,
+        duration: 0.6
+      }
+    }
+  };
+
+  // Varianti per l'hover
+  const socialIconHoverVariants = {
     initial: { 
       scale: 1, 
-      color: "#ffffff" // Bianco
+      color: "#ffffff",
+      rotate: 0
     },
     hover: { 
-      scale: [1, 1.2, 1.15], // Leggera overshoot per un effetto più naturale
-      color: "#16a34a", // Verde
+      scale: 1.2,
+      color: "#16a34a",
+      rotate: [0, 10, -10, 5, -5, 0],
       transition: { 
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1], // Curva di easing personalizzata
+        duration: 0.8,
+        ease: [0.25, 0.1, 0.25, 1],
         color: {
-          duration: 0.5,
-          ease: "easeInOut"
+          duration: 0.5
+        },
+        rotate: {
+          duration: 0.8
         }
       } 
     }
   };
 
+  // Effetto "pulse" continuo
+  const pulseVariants = {
+    pulse: {
+      scale: [1, 1.05, 1],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
-    <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-      {/* Sfondo */}
-      <div 
+    <section 
+      ref={heroRef}
+      id="hero" 
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden"
+    >
+      {/* Sfondo con animazione */}
+      <motion.div 
         className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: "url('/img/sfondo.jpg')" }}
+        style={{ 
+          backgroundImage: "url('/img/sfondo.jpg')",
+          scale,
+          y,
+          willChange: "transform"
+        }}
       >
         <div className="absolute inset-0 bg-black/80"></div>
-      </div>
+      </motion.div>
       
       {/* Contenuto */}
       <div className="container mx-auto px-4 z-10 text-center">
         <motion.h1 
-          className="text-5xl md:text-6xl lg:text-8.75xl font-bold text-white mb-6"
+          className="text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-6"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-       {/*  <p className="font-mono text-xl text-green-600">Dal 1905</p> */}
           <span className="block">Antica Hosteria</span>
           <span className="block text-green-600">Odiago</span>
         </motion.h1>
         
-        <motion.p
-          className="text-xl text-amber-100 mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        >
-          
-        </motion.p>
-
-        {/* Icone Social - Versione Smooth */}
+        {/* Icone Social */}
         <motion.div 
-          className="flex justify-center gap-8 mb-8" // Aumentato gap a 8
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
+          className="flex justify-center gap-8 mb-8"
+          variants={socialContainerVariants}
+          initial="hidden"
+          animate="visible"
         >
           <motion.a
             href="https://instagram.com/tuoprofilo"
             target="_blank"
             rel="noopener noreferrer"
-            variants={socialIconVariants}
-            initial="initial"
+            variants={socialItemVariants}
             whileHover="hover"
+            whileTap={{ scale: 0.9 }}
+            initial="initial"
+            animate={["visible", "pulse"]}
             className="cursor-pointer"
           >
-            <Instagram size={30} /> {/* Leggermente più grande */}
+            <motion.div
+              variants={socialIconHoverVariants}
+              whileHover="hover"
+              className="p-2 rounded-full bg-white/10 backdrop-blur-sm"
+            >
+              <Instagram size={32} strokeWidth={1.5} />
+            </motion.div>
           </motion.a>
 
           <motion.a
             href="https://facebook.com/tuapagina"
             target="_blank"
             rel="noopener noreferrer"
-            variants={socialIconVariants}
-            initial="initial"
+            variants={socialItemVariants}
             whileHover="hover"
+            whileTap={{ scale: 0.9 }}
+            initial="initial"
+            animate={["visible", "pulse"]}
             className="cursor-pointer"
           >
-            <Facebook size={30} /> {/* Leggermente più grande */}
+            <motion.div
+              variants={socialIconHoverVariants}
+              whileHover="hover"
+              className="p-2 rounded-full bg-white/10 backdrop-blur-sm"
+            >
+              <Facebook size={32} strokeWidth={1.5} />
+            </motion.div>
           </motion.a>
         </motion.div>
         
@@ -89,7 +165,7 @@ export const Hero = () => {
           className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg transition-all duration-300"
           whileHover={{ 
             scale: 1.05,
-            backgroundColor: "#166534" // Verde più scuro
+            backgroundColor: "#166534"
           }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0 }}
