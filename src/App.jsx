@@ -2,28 +2,25 @@ import { Hero } from "./pages/Hero";
 import { useState } from "react";
 import { About } from "./pages/About";
 import { LoadingScreen } from "./pages/LoadingScreen";
-import { Banner } from "./pages/Banner";
-import { Portfolio } from "./pages/Portfolio";
-import { Stack } from "./pages/Stack";
-import { Footer } from "./components/Footer";
 import { Navbar } from "./components/Navbar";
-
-
+import { Menu } from "./pages/Menu";
 
 export default function App() {
- 
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <>
-     
-
-       <Navbar/>
-        <Hero />
-        <About />
-        <About />
-     
-
-        
+      {isLoading ? (
+        <LoadingScreen onComplete={() => setIsLoading(false)} />
+      ) : (
+        <>
+          <Navbar />
+          <Hero />
+          <About />
+          <Menu/>
+         
+        </>
+      )}
     </>
   );
 }
-

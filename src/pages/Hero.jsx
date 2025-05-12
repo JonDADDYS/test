@@ -27,26 +27,27 @@ export const Hero = () => {
     }
   };
 
-  const socialItemVariants = {
-    hidden: { 
-      y: 20,
+  // Nuova animazione di entrata per le icone
+  const socialIconEntrance = {
+    hidden: {
       opacity: 0,
-      scale: 0.8
+      y: 20,
+      rotate: -15
     },
     visible: {
-      y: 0,
       opacity: 1,
-      scale: 1,
+      y: 0,
+      rotate: 0,
       transition: {
         type: "spring",
-        stiffness: 200,
-        damping: 15,
+        stiffness: 150,
+        damping: 10,
         duration: 0.6
       }
     }
   };
 
-  // Varianti per l'hover
+  // Varianti per l'hover (invariate)
   const socialIconHoverVariants = {
     initial: { 
       scale: 1, 
@@ -113,7 +114,7 @@ export const Hero = () => {
           <span className="block text-green-600">Odiago</span>
         </motion.h1>
         
-        {/* Icone Social */}
+        {/* Icone Social con nuova animazione di entrata */}
         <motion.div 
           className="flex justify-center gap-8 mb-8"
           variants={socialContainerVariants}
@@ -124,10 +125,10 @@ export const Hero = () => {
             href="https://instagram.com/tuoprofilo"
             target="_blank"
             rel="noopener noreferrer"
-            variants={socialItemVariants}
+            variants={socialIconEntrance}
             whileHover="hover"
             whileTap={{ scale: 0.9 }}
-            initial="initial"
+            initial="hidden"
             animate={["visible", "pulse"]}
             className="cursor-pointer"
           >
@@ -144,10 +145,10 @@ export const Hero = () => {
             href="https://facebook.com/tuapagina"
             target="_blank"
             rel="noopener noreferrer"
-            variants={socialItemVariants}
+            variants={socialIconEntrance}
             whileHover="hover"
             whileTap={{ scale: 0.9 }}
-            initial="initial"
+            initial="hidden"
             animate={["visible", "pulse"]}
             className="cursor-pointer"
           >

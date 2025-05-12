@@ -1,200 +1,235 @@
-import { motion } from 'framer-motion';
-import { MapPin, Utensils, History } from 'lucide-react';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 export const About = () => {
-  // Definizione delle animazioni
-  const cardAnimation = {
-    hidden: { opacity: 0, y: 50 },
+  const [ref1, inView1] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [ref2, inView2] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [ref3, inView3] = useInView({ threshold: 0.1, triggerOnce: true });
+  const controls = useAnimation();
+
+  // Animazioni per i blocchi
+  const containerVariants = {
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 10
+        staggerChildren: 0.2,
+        when: "beforeChildren"
       }
     }
   };
 
-  const contentAnimation = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 }
+  const textVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
   };
 
+  const imageHoverVariants = {
+    rest: { scale: 1 },
+    hover: {
+      scale: 1.03,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const imageLoadVariants = {
+    hidden: { scale: 0.95, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (inView1) controls.start("visible");
+  }, [controls, inView1]);
+
   return (
-    <section  data-white-section="true"  id="about" className="bg-white py-20 px-4">
-      <div className="container mx-auto">
-        <motion.h2 
-          className="text-4xl font-serif text-center mb-16 text-gray-800"
-          initial="hidden"
-          whileInView="visible"
-          variants={cardAnimation}
-          viewport={{ once: false, margin: "0px 0px -100px 0px" }}
+    <section id="about" data-white-section="true" className="bg-white py-16 md:py-24">
+      {/* Citazione animata */}
+      <motion.div
+        ref={ref1}
+        initial="hidden"
+        animate={inView1 ? "visible" : "hidden"}
+        variants={containerVariants}
+        className="container mx-auto px-4"
+      >
+        <motion.div 
+          variants={textVariants}
+          className="text-center mb-16"
         >
-          La Nostra Storia
-        </motion.h2>
+          <motion.h2 
+            className="text-3xl md:text-4xl font-serif text-gray-800 mb-4"
+            initial={{ opacity: 0 }}
+            animate={inView1 ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            <motion.span 
+              className="block italic text-green-600 text-5xl mb-2"
+              initial={{ scale: 0 }}
+              animate={inView1 ? { scale: 1 } : { scale: 0 }}
+              transition={{ delay: 0.2, type: "spring" }}
+            >"</motion.span>
+            Dal 1905 a vostro servizio
+          </motion.h2>
+          <motion.p 
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView1 ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.5, duration: 0.6 }}
+          >
+            Tradizione e passione si incontrano nella nostra cucina, dove ogni piatto racconta una storia
+          </motion.p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Card 1 - Storia */}
-          <motion.div
-            className="bg-white rounded-2xl overflow-hidden border border-gray-200"
+        {/* Sezione storia + piatti */}
+        <div className="grid md:grid-cols-2 gap-12 md:gap-8">
+          {/* Blocco storia */}
+          <motion.div 
+            ref={ref2}
             initial="hidden"
-            whileInView="visible"
-            variants={cardAnimation}
-            viewport={{ once: false, margin: "0px 0px -100px 0px" }}
+            animate={inView2 ? "visible" : "hidden"}
+            variants={containerVariants}
+            className="flex flex-col md:flex-row gap-6 items-center"
           >
             <motion.div 
-              className="h-48 overflow-hidden"
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.3 }}
+              variants={imageLoadVariants}
+              whileHover="hover"
+              initial="rest"
+              className="w-full h-64 md:h-80 bg-gray-100 overflow-hidden rounded-lg shadow-md cursor-pointer"
             >
-              <img 
+              <motion.img 
                 src="/img/storia.jpg" 
-                alt="Storica osteria"
+                alt="Storia dell'osteria"
                 className="w-full h-full object-cover"
+                variants={imageHoverVariants}
+                whileHover={{
+                  scale: 1.05,
+                  transition: { duration: 0.4 }
+                }}
               />
             </motion.div>
-            <div className="p-6">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                variants={contentAnimation}
-                viewport={{ once: false }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center mb-4"
-              >
-                <History className="text-amber-600 mr-2" size={24} />
-                <h3 className="text-xl font-serif text-gray-800">La Nostra Storia</h3>
-              </motion.div>
-              <motion.p
+            <motion.div 
+              variants={textVariants}
+              className="text-center md:text-left"
+            >
+              <h3 className="text-2xl font-serif text-gray-800 mb-3">La nostra storia</h3>
+              <motion.p 
                 className="text-gray-600 mb-4"
-                initial="hidden"
-                whileInView="visible"
-                variants={contentAnimation}
-                viewport={{ once: false }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView2 ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.3 }}
               >
-                Fondata nel 1950, la nostra osteria porta avanti la tradizione 
-                culinaria di famiglia.
+                Fondata nel 1905, la nostra osteria ha servito generazioni di avventori con piatti che rispecchiano la tradizione locale.
               </motion.p>
-              <motion.button
-                className="text-amber-600 hover:text-amber-800 font-medium"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
+              <motion.p 
+                className="text-gray-600"
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView2 ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.4 }}
               >
-                Scopri di più →
-              </motion.button>
-            </div>
+                Da piccolo locale di paese a rinomata meta gastronomica, mantenendo intatta l'autenticità delle ricette originali.
+              </motion.p>
+            </motion.div>
           </motion.div>
 
-          {/* Card 2 - Menu */}
-          <motion.div
-            className="bg-white rounded-2xl overflow-hidden border border-gray-200"
+          {/* Blocco cucina */}
+          <motion.div 
+            ref={ref3}
             initial="hidden"
-            whileInView="visible"
-            variants={cardAnimation}
-            viewport={{ once: false, margin: "0px 0px -100px 0px" }}
-            transition={{ delay: 0.1 }}
+            animate={inView3 ? "visible" : "hidden"}
+            variants={containerVariants}
+            className="flex flex-col md:flex-row gap-6 items-center"
           >
             <motion.div 
-              className="h-48 overflow-hidden"
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.3 }}
+              variants={imageLoadVariants}
+              whileHover="hover"
+              initial="rest"
+              className="w-full h-64 md:h-80 bg-gray-100 overflow-hidden rounded-lg shadow-md order-1 md:order-2 cursor-pointer"
             >
-              <img 
+              <motion.img 
                 src="/img/menu.jpg" 
-                alt="Piatto tipico"
+                alt="Specialità della casa"
                 className="w-full h-full object-cover"
+                variants={imageHoverVariants}
+                whileHover={{
+                  scale: 1.05,
+                  transition: { duration: 0.4 }
+                }}
               />
             </motion.div>
-            <div className="p-6">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                variants={contentAnimation}
-                viewport={{ once: false }}
-                transition={{ delay: 0.3 }}
-                className="flex items-center mb-4"
-              >
-                <Utensils className="text-amber-600 mr-2" size={24} />
-                <h3 className="text-xl font-serif text-gray-800">Il Nostro Menu</h3>
-              </motion.div>
-              <motion.p
-                className="text-gray-600 mb-4"
-                initial="hidden"
-                whileInView="visible"
-                variants={contentAnimation}
-                viewport={{ once: false }}
-                transition={{ delay: 0.4 }}
-              >
-                Piatti preparati con ingredienti locali seguendo antiche ricette.
-              </motion.p>
-              <motion.button
-                className="text-amber-600 hover:text-amber-800 font-medium"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                Vedi il menu →
-              </motion.button>
-            </div>
-          </motion.div>
-
-          {/* Card 3 - Dove Trovarci */}
-          <motion.div
-            className="bg-white rounded-2xl overflow-hidden border border-gray-200"
-            initial="hidden"
-            whileInView="visible"
-            variants={cardAnimation}
-            viewport={{ once: false, margin: "0px 0px -100px 0px" }}
-            transition={{ delay: 0.2 }}
-          >
             <motion.div 
-              className="h-48 overflow-hidden"
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.3 }}
+              variants={textVariants}
+              className="text-center md:text-left order-2 md:order-1"
             >
-              <iframe 
-                title="Mappa dell'osteria"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.654246110987!2d12.492351315441486!3d41.890210179221295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f61b6532013ad%3A0x28f1c82e908503c4!2sColosseo!5e0!3m2!1sit!2sit!4v1623396146140!5m2!1sit!2sit" 
-                className="w-full h-full border-0" 
-                allowFullScreen
-                loading="lazy"
-              ></iframe>
-            </motion.div>
-            <div className="p-6">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                variants={contentAnimation}
-                viewport={{ once: false }}
-                transition={{ delay: 0.4 }}
-                className="flex items-center mb-4"
-              >
-                <MapPin className="text-amber-600 mr-2" size={24} />
-                <h3 className="text-xl font-serif text-gray-800">Dove Trovarci</h3>
-              </motion.div>
-              <motion.p
+              <h3 className="text-2xl font-serif text-gray-800 mb-3">La nostra cucina</h3>
+              <motion.p 
                 className="text-gray-600 mb-4"
-                initial="hidden"
-                whileInView="visible"
-                variants={contentAnimation}
-                viewport={{ once: false }}
-                transition={{ delay: 0.5 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView3 ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.3 }}
               >
-                Via della Tradizione, 123<br />
-                00100 Roma (RM)
+                Cucina d'osteria rivisitata con materie prime selezionate e tecniche moderne.
               </motion.p>
-              <motion.button
-                className="text-amber-600 hover:text-amber-800 font-medium"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
+              <motion.ul 
+                className="text-gray-600 space-y-2"
+                initial={{ opacity: 0 }}
+                animate={inView3 ? { opacity: 1 } : {}}
+                transition={{ delay: 0.4 }}
               >
-                Indicazioni →
-              </motion.button>
-            </div>
+                <motion.li 
+                  initial={{ x: -10 }}
+                  animate={inView3 ? { x: 0 } : {}}
+                  transition={{ delay: 0.5 }}
+                >• Pasta fatta a mano giornalmente</motion.li>
+                <motion.li 
+                  initial={{ x: -10 }}
+                  animate={inView3 ? { x: 0 } : {}}
+                  transition={{ delay: 0.6 }}
+                >• Carni provenienti da allevamenti locali</motion.li>
+                <motion.li 
+                  initial={{ x: -10 }}
+                  animate={inView3 ? { x: 0 } : {}}
+                  transition={{ delay: 0.7 }}
+                >• Pesce fresco del mare Adriatico</motion.li>
+                <motion.li 
+                  initial={{ x: -10 }}
+                  animate={inView3 ? { x: 0 } : {}}
+                  transition={{ delay: 0.8 }}
+                >• Vini selezionati dalla cantina storica</motion.li>
+              </motion.ul>
+            </motion.div>
           </motion.div>
         </div>
-      </div>
+
+        {/* Citazione finale */}
+        <motion.div
+          className="mt-16 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView1 ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 1.2 }}
+        >
+          <p className="text-gray-500 italic">
+            "Non si tratta solo di cibo, ma di esperienze che durano nel tempo"
+          </p>
+          <p className="text-gray-400 mt-2">- Lo chef</p>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
