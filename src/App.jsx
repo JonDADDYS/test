@@ -6,6 +6,8 @@ import { Navbar } from "./components/Navbar";
 import { Menu } from "./pages/Menu";
 import {Galleria} from "./pages/Galleria";
 import { Recensioni } from "./pages/Recensioni";
+import { Contatti } from "./pages/Contatti";
+import { Footer } from "./components/Footer";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +24,8 @@ export default function App() {
           <Menu/>
           <Galleria />
           <Recensioni />
+          <Contatti />
+          <Footer />
          
         </>
       )}

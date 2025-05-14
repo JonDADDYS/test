@@ -1,104 +1,173 @@
-import React from "react";
-import {
-  AiFillGithub,
-  AiOutlineTwitter,
-  AiFillFacebook,
-  AiFillInstagram,
-} from "react-icons/ai";
-import { FaTelegramPlane } from "react-icons/fa";
+import { motion, useAnimation, useInView } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { 
+  FiMapPin, 
+  FiPhone, 
+  FiMail, 
+  FiInstagram,
+  FiFacebook,
+  FiClock
+} from 'react-icons/fi';
 
 export const Footer = () => {
-  return (
-    <footer className="py-8" id="contact">
-      <div className="max-w-[1200px] mx-auto px-4">
-        <div className="flex items-center justify-between flex-col md:flex-row">
-          <div>
-            <h2 className="md:text-7xl text-4xl font-bold mb-10 text-white/50">
-              Get in <span className="text-gray-400">touch</span>
-            </h2>
-            <a
-              className="md:text-7xl text-4xl font-semibold text-white underline decoration-gray-400 decoration-2
-                                    underline-offset-4 hover:decoration-gray-200 transition duration-300"
-              href="mailto:jonatroiano@gmail.com"
-            >
-            jonatroiano<br/>@gmail.com
-            </a>
-          </div>
+  const controls = useAnimation();
+  const footerRef = useRef(null);
+  const isInView = useInView(footerRef, { once: false, amount: 0.2 });
 
-          <div className="text-white/50 mt-12">
-            <div className="mb-8">
-              <p className="text-lg mb-1">Phone</p>
-              <a
-                href="+990788979999"
-                className="text-2xl font-semibold underline decoration-gray-400 decoration-2
-                                    underline-offset-4 hover:decoration-gray-400 transition duration-300"
+  // Animazioni al scroll
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
+  // Varianti animazione
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const item = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }
+  };
+
+  return (
+    <footer 
+      ref={footerRef}
+      className="bg-gray-900 text-white pt-16 pb-8"
+    >
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          animate={controls}
+          variants={container}
+          className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12"
+        >
+          {/* Colonna Logo */}
+          <motion.div variants={item} className="flex flex-col items-center md:items-start">
+            <img 
+              src="/img/logo2.png" 
+              alt="Osteria Odiago Logo" 
+              className="h-24 mb-4 object-contain"
+            />
+            <p className="text-gray-400 text-center md:text-left">
+              Tradizione e innovazione nella cucina italiana dal 1985
+            </p>
+          </motion.div>
+
+          {/* Colonna Contatti */}
+          <motion.div variants={item} className="flex flex-col items-center md:items-start">
+            <h3 className="text-xl font-serif font-bold mb-6 text-white">Contatti</h3>
+            <ul className="space-y-4">
+              <li className="flex items-center">
+                <FiMapPin className="text-green-500 mr-3 text-lg" />
+                <span>Via del Ristorante, 123 - Roma</span>
+              </li>
+              <li className="flex items-center">
+                <FiPhone className="text-green-500 mr-3 text-lg" />
+                <span>+39 06 1234567</span>
+              </li>
+              <li className="flex items-center">
+                <FiMail className="text-green-500 mr-3 text-lg" />
+                <span>info@osteriaodiago.com</span>
+              </li>
+              <li className="flex items-center">
+                <FiClock className="text-green-500 mr-3 text-lg" />
+                <span>Aperto 7 giorni su 7</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Colonna Orari */}
+          <motion.div variants={item} className="flex flex-col items-center md:items-start">
+            <h3 className="text-xl font-serif font-bold mb-6 text-white">Orari</h3>
+            <ul className="space-y-3 text-gray-400">
+              <li className="flex justify-between">
+                <span className="font-medium">Lun-Ven:</span>
+                <span>12:00 - 15:00 | 19:00 - 23:00</span>
+              </li>
+              <li className="flex justify-between">
+                <span className="font-medium">Sabato:</span>
+                <span>12:00 - 15:30 | 19:00 - 23:30</span>
+              </li>
+              <li className="flex justify-between">
+                <span className="font-medium">Domenica:</span>
+                <span>12:00 - 15:30 | 19:00 - 22:30</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Colonna Social */}
+          <motion.div variants={item} className="flex flex-col items-center md:items-start">
+            <h3 className="text-xl font-serif font-bold mb-6 text-white">Seguici</h3>
+            <div className="flex space-x-4 mb-6">
+              <a 
+                href="#" 
+                className="bg-gray-800 hover:bg-green-600 transition-colors p-3 rounded-full"
+                aria-label="Instagram"
               >
-                +39 3492815976 
+                <FiInstagram className="text-white text-xl" />
+              </a>
+              <a 
+                href="#" 
+                className="bg-gray-800 hover:bg-green-600 transition-colors p-3 rounded-full"
+                aria-label="Facebook"
+              >
+                <FiFacebook className="text-white text-xl" />
+              </a>
+              <a 
+                href="#" 
+                className="bg-gray-800 hover:bg-green-600 transition-colors p-3 rounded-full"
+                aria-label="Tripadvisor"
+              >
+                <svg className="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 6.628 5.373 12 12 12s12-5.372 12-12c0-6.627-5.373-12-12-12zm0 20.625c-4.962 0-8.875-3.913-8.875-8.875S7.038 3.125 12 3.125s8.875 3.913 8.875 8.875-3.913 8.875-8.875 8.875zM12.625 6.5h-1.25v7l5.175 3.3.7-1.063-4.625-3.237V6.5z"/>
+                </svg>
               </a>
             </div>
+            <p className="text-gray-400 text-center md:text-left">
+              Seguici per scoprire le nostre novità e promozioni
+            </p>
+          </motion.div>
+        </motion.div>
 
-            <div className="text-lg mb-8">
-              <p className="font-bold">Office</p>
-              <p>Street 98 98987</p>
-              <p>Berlin</p>
-              <p>Germany</p>
-            </div>
+        {/* Divider */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, transition: { delay: 0.5 } }}
+          className="border-t border-gray-800 my-8"
+        />
+
+        {/* Copyright */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ 
+            opacity: 1, 
+            y: 0,
+            transition: { delay: 0.6 } 
+          }}
+          className="text-center text-gray-500 text-sm"
+        >
+          <p>© {new Date().getFullYear()} Osteria Odiago. Tutti i diritti riservati.</p>
+          <p className="mt-2">P.IVA 12345678901</p>
+           <div className="mt-4 text-gray-600 text-xs">
+            Powered by Jona Troiano
           </div>
-        </div>
-
-        <div className="relative z-10 text-center mt-8 py-12">
-          <h1 className="hidden md:block text-[10rem] md:text-[12rem] lg:text-[15rem] font-bold text-white opacity-10">
-            JONNYJ
-          </h1>
-
-          <h1 className="md:hidden relative text-9xl md:text-[12rem] lg:text-[15rem] font-bold text-white opacity-10">
-            JON
-          </h1>
-        </div>
-
-        <div className="relative mt-12 container flex sm:justify-between justify-center items-center gap-10 max-sm:flex-col">
-          <p className="text-gray-200 caption text-n-4 lg:block">
-          © 2024 JONNYJ. All rights reserved.
-          </p>
-
-          <ul className="flex gap-5 flex-wrap">
-            <a
-              href="https://github.com"
-              aria-label="GitHub"
-              className="text-gray-200 flex items-center justify-center w-10 h-10 rounded-full"
-            >
-              <AiFillGithub size={30} />
-            </a>
-            <a
-              href="https://x.com"
-              aria-label="X (Twitter)"
-              className="text-gray-200 flex items-center justify-center w-10 h-10 rounded-full"
-            >
-              <AiOutlineTwitter size={30} />
-            </a>
-            <a
-              href="https://facebook.com"
-              aria-label="Facebook"
-              className="text-gray-200 flex items-center justify-center w-10 h-10 rounded-full"
-            >
-              <AiFillFacebook size={30} />
-            </a>
-            <a
-              href="https://instagram.com"
-              aria-label="Instagram"
-              className="text-gray-200 flex items-center justify-center w-10 h-10 rounded-full"
-            >
-              <AiFillInstagram size={30} />
-            </a>
-            <a
-              href="https://telegram.org"
-              aria-label="Telegram"
-              className="text-gray-200 flex items-center justify-center w-10 h-10 rounded-full"
-            >
-              <FaTelegramPlane size={30} />
-            </a>
-          </ul>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

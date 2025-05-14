@@ -6,7 +6,7 @@ const navLinks = [
   { title: "About", path: "#about" },
   { title: "Menu", path: "#menu" },
   { title: "Gallery", path: "#galleria" },
-  { title: "Contact", path: "#contact" },
+  { title: "Contact", path: "#contatti" },
 ];
 
 const containerVariants = {
