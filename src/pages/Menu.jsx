@@ -116,12 +116,16 @@ export const Menu = () => {
         className="container mx-auto px-4 pt-14"
       >
         <motion.h2 
-          className="text-4xl font-serif text-center text-gray-800 mb-12"
+         className="text-4xl md:text-5xl font-bold text-gray-800  text-center mb-16"
           variants={itemVariants}
+          
         >
           I Nostri Menù
+           <div className="w-24 h-1 bg-green-600 mx-auto mt-3" />
         </motion.h2>
 
+        
+        
         <motion.div 
           variants={itemVariants}
           className="max-w-4xl mx-auto relative"

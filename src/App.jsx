@@ -4,6 +4,8 @@ import { About } from "./pages/About";
 import { LoadingScreen } from "./pages/LoadingScreen";
 import { Navbar } from "./components/Navbar";
 import { Menu } from "./pages/Menu";
+import {Galleria} from "./pages/Galleria";
+import { Recensioni } from "./pages/Recensioni";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,6 +20,8 @@ export default function App() {
           <Hero />
           <About />
           <Menu/>
+          <Galleria />
+          <Recensioni />
          
         </>
       )}
