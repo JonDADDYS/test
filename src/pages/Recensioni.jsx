@@ -6,7 +6,7 @@ export const Recensioni = () => {
   const controls = useAnimation();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
-  const [currentSet, setCurrentSet] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [direction, setDirection] = useState(0);
 
   // Dati recensioni
@@ -19,54 +19,47 @@ export const Recensioni = () => {
       text: "La cena all'Osteria Odiago è stata il punto culminante del nostro viaggio.",
       date: "15/06/2023"
     },
-     {
+    {
       id: 2,
-      name: "Marco Rossi",
-      rating: 5,
-      title: "Esperienza indimenticabile",
-      text: "La cena all'Osteria Odiago è stata il punto culminante del nostro viaggio.",
-      date: "15/06/2023"
+      name: "Laura Bianchi",
+      rating: 4,
+      title: "Atmosfera autentica",
+      text: "Ci siamo sentiti come a casa in questo locale accogliente.",
+      date: "22/07/2023"
     },
-     {
+    {
       id: 3,
-      name: "Antonio Bianchi",
-      rating: 1,
-      title: "Esperienza indimenticabile",
-      text: "La cena all'Osteria Odiago è stata il punto culminante del nostro viaggio.",
-      date: "15/06/2023"
-    },
-     {
-      id: 4,
-      name: "Marco Rossi",
+      name: "Giovanni Verdi",
       rating: 5,
-      title: "Esperienza indimenticabile",
-      text: "La cena all'Osteria Odiago è stata il punto culminante del nostro viaggio.",
-      date: "15/06/2023"
+      title: "Pesce freschissimo",
+      text: "Il branzino al cartoccio era cotto al punto giusto.",
+      date: "05/09/2023"
     },
-     {
+    {
+      id: 4,
+      name: "Anna Neri",
+      rating: 5,
+      title: "Dolci da sogno",
+      text: "La panna cotta con frutti di bosco è semplicemente divina!",
+      date: "12/10/2023"
+    },
+    {
       id: 5,
-      name: "Marco Rossi",
-      rating: 4.5,
-      title: "Esperienza indimenticabile",
-      text: "La cena all'Osteria Odiago è stata il punto culminante del nostro viaggio.",
-      date: "15/06/2023"
+      name: "Paolo Gialli",
+      rating: 4,
+      title: "Creatività e tradizione",
+      text: "Abbiamo apprezzato l'approccio innovativo ai piatti classici.",
+      date: "28/10/2023"
     },
-     {
+    {
       id: 6,
-      name: "Marco Rossi",
-      rating:2,
-      title: "Esperienza indimenticabile",
-      text: "La cena all'Osteria Odiago è stata il punto culminante del nostro viaggio.",
-      date: "15/06/2023"
-    },
-    // ... altre recensioni ...
+      name: "Francesca Blu",
+      rating: 5,
+      title: "Perfetto per occasioni speciali",
+      text: "Lo staff ha fatto di tutto per renderlo indimenticabile.",
+      date: "03/11/2023"
+    }
   ];
-
-  // Calcola i gruppi di 3 recensioni
-  const reviewSets = [];
-  for (let i = 0; i < reviews.length; i += 3) {
-    reviewSets.push(reviews.slice(i, i + 3));
-  }
 
   // Animazioni al scroll
   useEffect(() => {
@@ -81,19 +74,19 @@ export const Recensioni = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.1,
         delayChildren: 0.2
       }
     }
   };
 
   const item = {
-    hidden: { y: 40, opacity: 0 },
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
+        duration: 0.6,
         ease: [0.16, 1, 0.3, 1]
       }
     }
@@ -102,48 +95,35 @@ export const Recensioni = () => {
   // Transizione fluida tra le slide
   const slideVariants = {
     enter: (dir) => ({
-      x: dir > 0 ? 100 : -100,
+      x: dir > 0 ? '100%' : '-100%',
       opacity: 0
     }),
     center: {
       x: 0,
       opacity: 1,
-      transition: { duration: 0.6 }
+      transition: { duration: 0.5 }
     },
     exit: (dir) => ({
-      x: dir < 0 ? 100 : -100,
+      x: dir < 0 ? '100%' : '-100%',
       opacity: 0,
-      transition: { duration: 0.4 }
+      transition: { duration: 0.3 }
     })
   };
 
-  const reviewItem = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        delay: 0.3,
-        duration: 0.7,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    }
-  };
-
-  const nextSet = () => {
+  const nextSlide = () => {
     setDirection(1);
-    setCurrentSet((prev) => (prev === reviewSets.length - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
   };
 
-  const prevSet = () => {
+  const prevSlide = () => {
     setDirection(-1);
-    setCurrentSet((prev) => (prev === 0 ? reviewSets.length - 1 : prev - 1));
+    setCurrentSlide((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
   };
 
   return (
     <section 
       ref={sectionRef}
-      className="relative py-12 bg-green-600" // Ridotta altezza sezione
+      className="relative py-12 bg-green-600"
       id="recensioni"
     >
       <div className="container mx-auto px-4 relative">
@@ -152,7 +132,7 @@ export const Recensioni = () => {
           initial="hidden"
           animate={controls}
           variants={container}
-          className="text-center mb-10" // Ridotto margine inferiore
+          className="text-center mb-10"
         >
           <motion.h2 
             variants={item} 
@@ -172,43 +152,34 @@ export const Recensioni = () => {
           </motion.p>
         </motion.div>
 
-        {/* Slider container */}
-        <div className="relative h-[380px] md:h-[280px]"> 
+        {/* Slider container - Mobile (1 slide) e Desktop (3 slides) */}
+        <div className="relative h-[400px] md:h-[280px]">
           {/* Freccia sinistra */}
           <button 
-            onClick={prevSet}
+            onClick={prevSlide}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-8 z-10 text-white p-2 rounded-full hover:bg-white/10 transition-colors"
           >
             <FiChevronLeft size={28} />
           </button>
 
-          {/* Recensioni con animazione */}
-          <motion.div
-            key={currentSet}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 gap-6 px-2"
-          >
-            {reviewSets[currentSet]?.map((review) => (
-              <motion.div
-                key={review.id}
-                variants={reviewItem}
-                initial="hidden"
-                animate="visible"
-                className="text-white p-5 flex flex-col items-center text-center"
-              >
-                {/* Nome con font serif e dimensione aumentata */}
-                <h3 className="text-2xl font-serif font-medium mb-3">{review.name}</h3>
-                
-                {/* Stelle */}
+          {/* Recensioni mobile (1 alla volta) */}
+          <div className="md:hidden h-full">
+            <motion.div
+              key={currentSlide}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="absolute inset-0 flex justify-center"
+            >
+              <div className="text-white p-5 flex flex-col items-center text-center w-full max-w-md">
+                <h3 className="text-2xl font-serif font-medium mb-3">{reviews[currentSlide].name}</h3>
                 <div className="flex mb-3 justify-center">
                   {[...Array(5)].map((_, i) => (
                     <svg
                       key={i}
-                      className={`w-6 h-6 ${i < review.rating ? 'text-yellow-300' : 'text-white/30'}`} // Stelle più grandi
+                      className={`w-6 h-6 ${i < reviews[currentSlide].rating ? 'text-yellow-300' : 'text-white/30'}`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -216,22 +187,54 @@ export const Recensioni = () => {
                     </svg>
                   ))}
                 </div>
-                
-                {/* Titolo recensione con font serif */}
-                <h4 className="text-xl font-serif font-medium mb-3 text-white/90">{review.title}</h4>
-                
-                {/* Testo recensione con dimensione aumentata */}
-                <blockquote className="text-white/80 mb-4 italic max-w-md text-lg">"{review.text}"</blockquote>
-                
-                {/* Data */}
-                <div className="text-white/60 text-base">{review.date}</div> // Testo più grande
-              </motion.div>
-            ))}
-          </motion.div>
+                <h4 className="text-xl font-serif font-medium mb-3 text-white/90">{reviews[currentSlide].title}</h4>
+                <blockquote className="text-white/80 mb-4 italic text-lg">"{reviews[currentSlide].text}"</blockquote>
+                <div className="text-white/60 text-base">{reviews[currentSlide].date}</div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Recensioni desktop (3 alla volta) */}
+          <div className="hidden md:block h-full">
+            <motion.div
+              key={currentSlide}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="absolute inset-0 grid grid-cols-3 gap-6 px-2"
+            >
+              {[
+                reviews[currentSlide],
+                reviews[(currentSlide + 1) % reviews.length],
+                reviews[(currentSlide + 2) % reviews.length]
+              ].map((review, index) => (
+                <div key={`${review.id}-${index}`} className="text-white p-5 flex flex-col items-center text-center">
+                  <h3 className="text-2xl font-serif font-medium mb-3">{review.name}</h3>
+                  <div className="flex mb-3 justify-center">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`w-6 h-6 ${i < review.rating ? 'text-yellow-300' : 'text-white/30'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <h4 className="text-xl font-serif font-medium mb-3 text-white/90">{review.title}</h4>
+                  <blockquote className="text-white/80 mb-4 italic max-w-md text-lg">"{review.text}"</blockquote>
+                  <div className="text-white/60 text-base">{review.date}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
 
           {/* Freccia destra */}
           <button 
-            onClick={nextSet}
+            onClick={nextSlide}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 z-10 text-white p-2 rounded-full hover:bg-white/10 transition-colors"
           >
             <FiChevronRight size={28} />
@@ -240,19 +243,19 @@ export const Recensioni = () => {
 
         {/* Indicatori slider */}
         <div className="flex justify-center mt-6 space-x-2">
-          {reviewSets.map((_, index) => (
+          {reviews.map((_, index) => (
             <button
               key={index}
               onClick={() => {
-                setDirection(index > currentSet ? 1 : -1);
-                setCurrentSet(index);
+                setDirection(index > currentSlide ? 1 : -1);
+                setCurrentSlide(index);
               }}
-              className={`w-3 h-3 rounded-full transition-colors ${currentSet === index ? 'bg-white' : 'bg-white/30'}`}
+              className={`w-2.5 h-2.5 rounded-full transition-colors ${currentSlide === index ? 'bg-white' : 'bg-white/30'}`}
             />
           ))}
         </div>
 
-        {/* Bottone Tripadvisor ingrandito */}
+        {/* Bottone Tripadvisor */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{
@@ -266,7 +269,7 @@ export const Recensioni = () => {
             href="https://www.tripadvisor.it"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-full text-base hover:bg-gray-50 transition-colors" // Bottone più grande
+            className="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-full text-base hover:bg-gray-50 transition-colors"
           >
             <span className="mr-3 font-medium">Vedi tutte le recensioni</span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
