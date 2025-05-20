@@ -8,6 +8,7 @@ import {Galleria} from "./pages/Galleria";
 import { Recensioni } from "./pages/Recensioni";
 import { Contatti } from "./pages/Contatti";
 import { Footer } from "./components/Footer";
+import { Prenota } from "./components/Prenota";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +20,7 @@ export default function App() {
       ) : (
         <>
           <Navbar />
+          <Prenota />
           <Hero />
           <About />
           <Menu/>

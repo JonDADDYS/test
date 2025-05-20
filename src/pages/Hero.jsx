@@ -162,19 +162,7 @@ export const Hero = () => {
           </motion.a>
         </motion.div>
         
-        <motion.button
-          className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg transition-all duration-300"
-          whileHover={{ 
-            scale: 1.05,
-            backgroundColor: "#166534"
-          }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          Prenota un tavolo
-        </motion.button>
+       
       </div>
     </section>
   );

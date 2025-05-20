@@ -1,6 +1,7 @@
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FaTripadvisor } from 'react-icons/fa';
 
 export const Recensioni = () => {
   const controls = useAnimation();
@@ -269,12 +270,10 @@ export const Recensioni = () => {
             href="https://www.tripadvisor.it"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-full text-base hover:bg-gray-50 transition-colors"
+            className="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-full text-base group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 border-2 border-transparent hover:border-green-100"
           >
             <span className="mr-3 font-medium">Vedi tutte le recensioni</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 0C5.373 0 0 5.373 0 12C0 18.627 5.373 24 12 24C18.627 24 24 18.627 24 12C24 5.373 18.627 0 12 0ZM12 20.625C7.038 20.625 3.125 16.712 3.125 11.75C3.125 6.788 7.038 2.875 12 2.875C16.962 2.875 20.875 6.788 20.875 11.75C20.875 16.712 16.962 20.625 12 20.625ZM12.625 6.5H11.375V13.5L16.8 16.8L17.5 15.737L12.625 12.875V6.5Z" fill="#00AA6C"/>
-            </svg>
+            <FaTripadvisor className="text-[#00AA6C] text-2xl transition-all duration-300 group-hover:text-green-600 group-hover:scale-110" />
           </a>
         </motion.div>
       </div>
