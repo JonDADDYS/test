@@ -267,7 +267,7 @@ export const Recensioni = () => {
           className="text-center mt-8"
         >
           <a
-            href="https://www.tripadvisor.it"
+            href="https://www.tripadvisor.it/Restaurant_Review-g2712987-d2697255-Reviews-Antica_Hosteria_di_Odiago-Odiago_Province_of_Bergamo_Lombardy.html"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center bg-white text-green-600 px-6 py-3 rounded-full text-base group transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 border-2 border-transparent hover:border-green-100"
